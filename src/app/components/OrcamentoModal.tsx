@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import Modal from "react-modal";
 
@@ -21,12 +22,17 @@ export default function OrcamentoDialog({
         const { latitude, longitude } = position.coords;
         const url = `http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=pt-BR&zoom=18`;
 
-        fetch(url)
+        axios
+          .get(url)
           .then(function (response) {
-            return response.json();
+            if (response.status === 200) {
+              return response.data;
+            } else {
+              throw new Error("Erro na requisição.");
+            }
           })
           .then(function (data) {
-            alert(data.display_name);
+            setUserLocation(data.display_name);
           })
           .catch(function (error) {
             console.error(error);
