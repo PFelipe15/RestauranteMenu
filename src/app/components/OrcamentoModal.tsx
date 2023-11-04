@@ -32,7 +32,7 @@ export default function OrcamentoDialog({
             }
           })
           .then(function (data) {
-            setUserLocation(data.display_name);
+            setUserLocation(data);
           })
           .catch(function (error) {
             console.error(error);
