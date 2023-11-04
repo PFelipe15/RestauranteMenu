@@ -54,7 +54,7 @@ export default function Home() {
         setCancelGps(true);
       }
     }
-  }, []);
+  }, [cancelGps]);
 
   const produtosWRGESSO = [
     {
@@ -158,11 +158,16 @@ export default function Home() {
           >
             Fechar
           </button>
-          <Image
-            src={currentGallery[ampliarImageIndex]}
-            alt={`Imagem ${ampliarImageIndex + 1}`}
-            className="w-full h-96 object-contain"
-          />
+
+          {currentGallery &&
+            ampliarImageIndex !== null &&
+            currentGallery[ampliarImageIndex] !== null && (
+              <Image
+                src={currentGallery[ampliarImageIndex]}
+                alt={`Imagem ${ampliarImageIndex + 1}`}
+                className="w-full h-96 object-contain"
+              />
+            )}
         </div>
       </div>
     );
