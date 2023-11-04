@@ -19,8 +19,12 @@ export default function Home() {
   const [userLocation, setUserLocation] = useState("");
   const [cancelGps, setCancelGps] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [currentGallery, setCurrentGallery] = useState([]);
-  const [ampliarImageIndex, setAmpliarImageIndex] = useState(null);
+  const [currentGallery, setCurrentGallery] = useState<
+    StaticImageData[] | null
+  >(null);
+  const [ampliarImageIndex, setAmpliarImageIndex] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     if (cancelGps === false) {
@@ -98,7 +102,7 @@ export default function Home() {
     },
   ];
 
-  const showImageGallery = (gallery) => {
+  const showImageGallery = (gallery: StaticImageData[]) => {
     setCurrentGallery(gallery);
     setIsGalleryOpen(true);
   };
