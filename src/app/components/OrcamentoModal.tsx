@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-interface Modal {
+interface ModalInf {
   productName: string;
   handleCloseModal: () => void;
 }
 export default function OrcamentoDialog({
   productName,
   handleCloseModal,
-}: Modal) {
+}: ModalInf) {
   const [hasMeasurements, setHasMeasurements] = useState(false);
   const [userLocation, setUserLocation] = useState("");
   const [largura, setLargura] = useState("");
@@ -49,14 +49,12 @@ export default function OrcamentoDialog({
     }
 
     const productInfo = `Quero fazer um orçamento de ${productName}, moro em ${userLocation}. ${metragem}`;
-    console.log(productInfo);
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=Olá, ${productInfo}`;
 
     const newTab = window.open(link, "_blank");
     if (newTab) {
       newTab.focus();
     } else {
-      // Se a abertura da nova aba for bloqueada, você pode dar ao usuário um link para clicar manualmente.
       window.location.href = link;
     }
   };
