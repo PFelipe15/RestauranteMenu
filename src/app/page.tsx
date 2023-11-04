@@ -4,12 +4,44 @@ import imagem from "../assets/banner.jpg";
 import Logo from "../assets/logo.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import OrcamentoDialog from "./components/OrcamentoModal";
+import axios from "axios";
 
 export default function Home() {
   const [productName, setProductName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState("");
+  const [cancelGps, setCancelGps] = useState(false);
+  useEffect(() => {
+    if (cancelGps === false) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude } = position.coords;
+          const url = `http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=pt-BR&zoom=18`;
+
+          axios
+            .get(url)
+            .then(function (response) {
+              if (response.status === 200) {
+                return response.data;
+              } else {
+                throw new Error("Erro na requisição.");
+              }
+            })
+            .then(function (data) {
+              setUserLocation(data.display_name);
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
+        });
+      } else {
+        alert("A geolocalização não é suportada neste navegador.");
+        setCancelGps(true);
+      }
+    }
+  }, []);
 
   const produtosWRGESSO = [
     {
@@ -116,6 +148,7 @@ export default function Home() {
               <OrcamentoDialog
                 productName={productName.toString()}
                 handleCloseModal={handleCloseDialog}
+                userLocation={userLocation.toString()}
               />
             )}
           </div>

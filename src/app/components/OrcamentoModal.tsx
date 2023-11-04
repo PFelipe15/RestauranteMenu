@@ -5,43 +5,19 @@ import Modal from "react-modal";
 interface ModalInf {
   productName: string;
   handleCloseModal: () => void;
+  userLocation: string;
 }
 export default function OrcamentoDialog({
   productName,
   handleCloseModal,
+  userLocation,
 }: ModalInf) {
   const [hasMeasurements, setHasMeasurements] = useState(false);
-  const [userLocation, setUserLocation] = useState("");
   const [largura, setLargura] = useState("");
   const [comprimento, setComprimento] = useState("");
   const [isOpen, setIsOpen] = useState(true);
 
-  const handleConfirmOrcamento = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        const url = `http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=pt-BR&zoom=18`;
-
-        axios
-          .get(url)
-          .then(function (response) {
-            if (response.status === 200) {
-              return response.data;
-            } else {
-              throw new Error("Erro na requisição.");
-            }
-          })
-          .then(function (data) {
-            setUserLocation(data);
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
-      });
-    } else {
-      alert("A geolocalização não é suportada neste navegador.");
-    }
-
+  const handleConfirmOrcamento = async () => {
     let metragem = "";
 
     if (hasMeasurements) {
@@ -53,6 +29,8 @@ export default function OrcamentoDialog({
         return;
       }
     }
+
+    alert(userLocation);
 
     const productInfo = `Quero fazer um orçamento de ${productName}, moro em ${userLocation}. ${metragem}`;
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=Olá, ${productInfo}`;
