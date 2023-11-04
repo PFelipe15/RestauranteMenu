@@ -1,6 +1,11 @@
 "use client";
 import Image from "next/image";
 import imagem from "../assets/banner.jpg";
+import imagem2 from "../assets/banner2.jpg";
+import imagem3 from "../assets/banner3.jpg";
+import imagem4 from "../assets/banner4.jpg";
+import imagem5 from "../assets/banner5.jpg";
+
 import Logo from "../assets/logo.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
@@ -45,34 +50,41 @@ export default function Home() {
 
   const produtosWRGESSO = [
     {
-      nome: "Forro de Gesso (por metro)",
+      nome: "Forro de Gesso Pé Topado (por metro)",
       preco: 49.99,
       imagem: imagem,
+      descricao:
+        "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
+    },
+
+    {
+      nome: "Forro de Gesso Pé Solto (por metro)",
+      preco: 49.99,
+      imagem: imagem2,
       descricao:
         "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
     },
     {
       nome: "Sancas de Gesso (por metro)",
       preco: 29.99,
-      imagem: imagem,
+      imagem: imagem3,
       descricao:
         "Sancas de gesso elegantes para adicionar um toque de estilo aos seus ambientes.",
     },
     {
       nome: "Divisórias de Gesso (por metro)",
       preco: 99.99,
-      imagem: imagem,
+      imagem: imagem4,
       descricao:
         "Divisórias de gesso versáteis para criar espaços funcionais em seu interior.",
     },
     {
       nome: "Molduras de Gesso (por metro)",
       preco: 19.99,
-      imagem: imagem,
+      imagem: imagem5,
       descricao:
         "Molduras de gesso decorativas para realçar a beleza de suas paredes e tetos.",
     },
-    // Adicione mais produtos conforme necessário
   ];
 
   const handleCloseDialog = () => {
@@ -118,8 +130,8 @@ export default function Home() {
               <Image
                 alt="produto imagem"
                 src={produto.imagem}
-                width={300}
-                height={200}
+                width={700}
+                height={300}
               />
             </div>
             <h2 className="text-lg font-semibold mt-2">{produto.nome}</h2>
