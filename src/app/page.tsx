@@ -43,6 +43,9 @@ export default function Home() {
     // Adicione mais produtos conforme necessário
   ];
 
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
   const handlePedirOrcamento = async (nomeProduto: string) => {
     setProductName(nomeProduto);
     setIsDialogOpen(true);
@@ -109,7 +112,12 @@ export default function Home() {
               Pedir Orçamento
             </button>
 
-            {isDialogOpen && <OrcamentoDialog productName={productName} />}
+            {isDialogOpen && (
+              <OrcamentoDialog
+                productName={productName.toString()}
+                handleCloseModal={handleCloseDialog}
+              />
+            )}
           </div>
         ))}
       </section>

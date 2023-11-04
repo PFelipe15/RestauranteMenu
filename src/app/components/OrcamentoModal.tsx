@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-export default function OrcamentoDialog(productName: string) {
-  const [hasMeasurements, setHasMeasurements] = useState(true);
+interface Modal {
+  productName: string;
+  handleCloseModal: () => void;
+}
+export default function OrcamentoDialog({
+  productName,
+  handleCloseModal,
+}: Modal) {
+  const [hasMeasurements, setHasMeasurements] = useState(false);
   const [userLocation, setUserLocation] = useState("");
   const [largura, setLargura] = useState("");
   const [comprimento, setComprimento] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleConfirmOrcamento = () => {
     if (navigator.geolocation) {
@@ -44,13 +52,19 @@ export default function OrcamentoDialog(productName: string) {
     console.log(productInfo);
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=Olá, ${productInfo}`;
 
-    // window.location.href = link;
+    const newTab = window.open(link, "_blank");
+    if (newTab) {
+      newTab.focus();
+    } else {
+      // Se a abertura da nova aba for bloqueada, você pode dar ao usuário um link para clicar manualmente.
+      window.location.href = link;
+    }
   };
 
   return (
     <Modal
-      isOpen={true}
-      onRequestClose={() => {}}
+      isOpen={isOpen}
+      onRequestClose={handleCloseModal}
       contentLabel="Confirmação de Orçamento"
       className="bg-white border border-gray-300 p-4 rounded-md shadow-lg max-w-sm mx-auto"
       overlayClassName="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50"
@@ -98,7 +112,7 @@ export default function OrcamentoDialog(productName: string) {
             <div className="flex flex-col items-center">
               <input
                 className="bg-white text-blue-500 w-24 py-2 rounded-md border border-blue-600"
-                type="number"
+                type={Number(largura) ? "number" : "text"} // Altera para texto se largura não for um número
                 value={comprimento}
                 onChange={(e) => setComprimento(e.target.value)}
               />
@@ -114,6 +128,13 @@ export default function OrcamentoDialog(productName: string) {
         className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
       >
         Confirmar
+      </button>
+
+      <button
+        onClick={handleCloseModal}
+        className="mt-4 text-blue-500 hover:underline cursor-pointer w-full"
+      >
+        Fechar
       </button>
     </Modal>
   );
