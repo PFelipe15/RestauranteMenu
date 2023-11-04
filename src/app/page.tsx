@@ -50,7 +50,7 @@ export default function Home() {
 
   const produtosWRGESSO = [
     {
-      nome: "Forro de Gesso Pé Topado (por metro)",
+      nome: "Forro de Gesso Pé Topado",
       preco: 49.99,
       imagem: imagem,
       descricao:
@@ -58,28 +58,28 @@ export default function Home() {
     },
 
     {
-      nome: "Forro de Gesso Pé Solto (por metro)",
+      nome: "Forro de Gesso Pé Solto",
       preco: 49.99,
       imagem: imagem2,
       descricao:
         "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
     },
     {
-      nome: "Sancas de Gesso (por metro)",
+      nome: "Sancas de Gesso",
       preco: 29.99,
       imagem: imagem3,
       descricao:
         "Sancas de gesso elegantes para adicionar um toque de estilo aos seus ambientes.",
     },
     {
-      nome: "Divisórias de Gesso (por metro)",
+      nome: "Divisórias de Gesso",
       preco: 99.99,
       imagem: imagem4,
       descricao:
         "Divisórias de gesso versáteis para criar espaços funcionais em seu interior.",
     },
     {
-      nome: "Molduras de Gesso (por metro)",
+      nome: "Molduras de Gesso",
       preco: 19.99,
       imagem: imagem5,
       descricao:
@@ -134,7 +134,9 @@ export default function Home() {
                 height={300}
               />
             </div>
-            <h2 className="text-lg font-semibold mt-2">{produto.nome}</h2>
+            <h2 className="text-lg font-semibold mt-2">
+              {produto.nome} (por metro)
+            </h2>
             <p className="text-gray-600 text-sm">{produto.descricao}</p>
             <div className="flex justify-between items-center mt-4">
               <p className="text-xl font-semibold text-blue-500">
