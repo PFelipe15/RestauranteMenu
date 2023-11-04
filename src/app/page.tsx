@@ -98,7 +98,7 @@ export default function Home() {
     },
   ];
 
-  const showImageGallery = (gallery: StaticImageData[]) => {
+  const showImageGallery = (gallery) => {
     setCurrentGallery(gallery);
     setIsGalleryOpen(true);
   };
