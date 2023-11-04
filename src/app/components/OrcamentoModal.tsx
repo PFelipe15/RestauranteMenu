@@ -30,9 +30,13 @@ export default function OrcamentoDialog({
       }
     }
 
-    alert(userLocation);
+    let location = "";
 
-    const productInfo = `Quero fazer um orçamento de ${productName}, moro em ${userLocation}. ${metragem}`;
+    if (userLocation) {
+      location = `, moro em ${userLocation}`;
+    }
+
+    const productInfo = `Quero fazer um orçamento de ${productName}${location}. ${metragem}`;
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=Olá, ${productInfo}`;
 
     const newTab = window.open(link, "_blank");
