@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import imagem from "../assets/banner.jpg";
 import imagem2 from "../assets/banner2.jpg";
 import imagem3 from "../assets/banner3.jpg";
@@ -18,6 +18,10 @@ export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [userLocation, setUserLocation] = useState("");
   const [cancelGps, setCancelGps] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [currentGallery, setCurrentGallery] = useState([]);
+  const [ampliarImageIndex, setAmpliarImageIndex] = useState(null);
+
   useEffect(() => {
     if (cancelGps === false) {
       if (navigator.geolocation) {
@@ -55,6 +59,8 @@ export default function Home() {
       imagem: imagem,
       descricao:
         "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
+
+      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
     },
 
     {
@@ -63,13 +69,16 @@ export default function Home() {
       imagem: imagem2,
       descricao:
         "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
+      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
     },
+
     {
       nome: "Sancas de Gesso",
       preco: 29.99,
       imagem: imagem3,
       descricao:
         "Sancas de gesso elegantes para adicionar um toque de estilo aos seus ambientes.",
+      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
     },
     {
       nome: "Divisórias de Gesso",
@@ -77,6 +86,7 @@ export default function Home() {
       imagem: imagem4,
       descricao:
         "Divisórias de gesso versáteis para criar espaços funcionais em seu interior.",
+      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
     },
     {
       nome: "Molduras de Gesso",
@@ -84,8 +94,74 @@ export default function Home() {
       imagem: imagem5,
       descricao:
         "Molduras de gesso decorativas para realçar a beleza de suas paredes e tetos.",
+      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
     },
   ];
+
+  const showImageGallery = (gallery: StaticImageData[]) => {
+    setCurrentGallery(gallery);
+    setIsGalleryOpen(true);
+  };
+
+  const ImageGallery = () => {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <button
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            onClick={() => setIsGalleryOpen(false)}
+          >
+            Fechar
+          </button>
+          <div className="image-container grid grid-cols-3 gap-4">
+            {currentGallery &&
+              currentGallery.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative group"
+                  onClick={() => setAmpliarImageIndex(index)}
+                >
+                  <Image
+                    src={image}
+                    alt={`Imagem ${index + 1}`}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="opacity-0 group-hover:opacity-100 absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
+                    <button className="text-white hover:text-gray-300">
+                      Ampliar
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const AmpliarModal = () => {
+    if (ampliarImageIndex === null) {
+      return null;
+    }
+
+    return (
+      <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <button
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            onClick={() => setAmpliarImageIndex(null)}
+          >
+            Fechar
+          </button>
+          <Image
+            src={currentGallery[ampliarImageIndex]}
+            alt={`Imagem ${ampliarImageIndex + 1}`}
+            className="w-full h-96 object-contain"
+          />
+        </div>
+      </div>
+    );
+  };
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
@@ -145,6 +221,7 @@ export default function Home() {
               <a
                 href="#"
                 className="bg-blue-900 text-white px-2 py-1 rounded-md"
+                onClick={() => showImageGallery(produto.galery)}
               >
                 Imagens
               </a>
@@ -157,6 +234,8 @@ export default function Home() {
             >
               Pedir Orçamento
             </button>
+            {isGalleryOpen && <ImageGallery />}
+            {ampliarImageIndex !== null && <AmpliarModal />}
 
             {isDialogOpen && (
               <OrcamentoDialog
