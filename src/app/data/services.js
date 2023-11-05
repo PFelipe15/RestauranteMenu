@@ -86,7 +86,7 @@ const ProdutosWRGESSO = [
         nome: "Molduras de Gesso Personalizadas",
         preco: 19.99,
 
-        imagem: moldura14,
+        imagem: moldura11,
         tipoMetro: "Metro linear",
         descricao:
             "Molduras de gesso decorativas para realçar a beleza de suas paredes e tetos.",
