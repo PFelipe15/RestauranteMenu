@@ -154,7 +154,7 @@ export default function Home() {
             </div>
             <button
               onClick={() => {
-                const link = `https://api.whatsapp.com/send?phone=558688058994&text=Olá, estou querendo solicitar um Orcamento!`;
+                const link = `https://api.whatsapp.com/send?phone=558698527763&text=Olá, estou querendo solicitar um Orcamento!`;
 
                 const newTab = window.open(link, "_blank");
                 if (newTab) {
