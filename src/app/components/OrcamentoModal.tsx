@@ -22,7 +22,7 @@ export default function OrcamentoDialog({
 
     if (hasMeasurements) {
       if (largura && comprimento) {
-        const total = Number(largura) + Number(comprimento);
+        const total = Number(largura) * Number(comprimento);
         metragem = `Minhas metragens são Largura: ${largura} x Comprimento: ${comprimento}, dando um total de ${total} metros quadrados.`;
       } else {
         alert("Por favor, preencha os valores de largura e comprimento.");

@@ -58,9 +58,11 @@ export default function Home() {
 
   const produtosWRGESSO = [
     {
-      nome: "Forro de Gesso Pé Topado",
+      nome: "Forro de Gesso Pé Colado",
       preco: 49.99,
       imagem: imagem,
+
+      tipoMetro: "mt²",
       descricao:
         "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
 
@@ -71,6 +73,7 @@ export default function Home() {
       nome: "Forro de Gesso Pé Solto",
       preco: 49.99,
       imagem: imagem2,
+      tipoMetro: "mt²",
       descricao:
         "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
       galery: [imagem, imagem2, imagem4, imagem3, imagem5],
@@ -80,6 +83,7 @@ export default function Home() {
       nome: "Sancas de Gesso",
       preco: 29.99,
       imagem: imagem3,
+      tipoMetro: "Metro linear",
       descricao:
         "Sancas de gesso elegantes para adicionar um toque de estilo aos seus ambientes.",
       galery: [imagem, imagem2, imagem4, imagem3, imagem5],
@@ -88,14 +92,17 @@ export default function Home() {
       nome: "Divisórias de Gesso",
       preco: 99.99,
       imagem: imagem4,
+      tipoMetro: "mt²",
       descricao:
         "Divisórias de gesso versáteis para criar espaços funcionais em seu interior.",
       galery: [imagem, imagem2, imagem4, imagem3, imagem5],
     },
     {
-      nome: "Molduras de Gesso",
+      nome: "Molduras de Gesso Personalizadas",
       preco: 19.99,
+
       imagem: imagem5,
+      tipoMetro: "Metro linear",
       descricao:
         "Molduras de gesso decorativas para realçar a beleza de suas paredes e tetos.",
       galery: [imagem, imagem2, imagem4, imagem3, imagem5],
@@ -186,10 +193,10 @@ export default function Home() {
       <header className="bg-blue-500 p-4 shadow-md">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Image alt="logo" src={Logo} width={80} height={80} />
+            <Image alt="logo" src={Logo} width={50} height={50} />
             <div className="text-white">
-              <h1 className="text-2xl font-semibold">WR GESSO</h1>
-              <p className="text-sm">Gesso de Excelência, Teto de Elegância.</p>
+              <h1 className="text-xl font-semibold">WR GESSO</h1>
+              <p className="text-xs">Gesso de Excelência, Teto de Elegância.</p>
             </div>
           </div>
           <div className="text-white flex items-center space-x-4">
@@ -221,12 +228,12 @@ export default function Home() {
               />
             </div>
             <h2 className="text-lg font-semibold mt-2">
-              {produto.nome} (por metro)
+              {produto.nome} (por {produto.tipoMetro})
             </h2>
             <p className="text-gray-600 text-sm">{produto.descricao}</p>
             <div className="flex justify-between items-center mt-4">
               <p className="text-xl font-semibold text-blue-500">
-                R$ {produto.preco.toFixed(2)} / metro
+                R$ {produto.preco.toFixed(2)} / {produto.tipoMetro}
               </p>
               <a
                 href="#"

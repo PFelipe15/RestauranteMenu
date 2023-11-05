@@ -24,9 +24,3 @@ body {
       transparent,
       rgb(var(--background-end-rgb)))
 }
-
-.bg-custom-banner {
-  background-image: url('../assets/banner4.jpg');
-  background-size: cover;
-
-}
