@@ -153,7 +153,16 @@ export default function Home() {
               </a>
             </div>
             <button
-              onClick={() => {}}
+              onClick={() => {
+                const link = `https://api.whatsapp.com/send?phone=5586988034600&text=Olá, estou querendo solicitar um Orcamento!`;
+
+                const newTab = window.open(link, "_blank");
+                if (newTab) {
+                  newTab.focus();
+                } else {
+                  window.location.href = link;
+                }
+              }}
               className="bg-green-700 w-full text-sm text-white gap-1 flex rounded-md px-2 py-2 items-center justify-center "
             >
               WhatsApp
