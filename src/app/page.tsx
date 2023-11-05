@@ -1,18 +1,12 @@
 "use client";
 import Image, { StaticImageData } from "next/image";
-import imagem from "../assets/banner.jpg";
-import imagem2 from "../assets/banner2.jpg";
-import imagem3 from "../assets/banner3.jpg";
-import imagem4 from "../assets/banner4.jpg";
-import imagem5 from "../assets/banner5.jpg";
-
 import Logo from "../assets/logo.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import OrcamentoDialog from "./components/OrcamentoModal";
 import axios from "axios";
-
+import ProdutosWRGESSO from "./data/services";
 export default function Home() {
   const [productName, setProductName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -55,59 +49,6 @@ export default function Home() {
       }
     }
   }, [cancelGps]);
-
-  const produtosWRGESSO = [
-    {
-      nome: "Forro de Gesso Pé Colado",
-      preco: 49.99,
-      imagem: imagem,
-
-      tipoMetro: "mt²",
-      descricao:
-        "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
-
-      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
-    },
-
-    {
-      nome: "Forro de Gesso Pé Solto",
-      preco: 49.99,
-      imagem: imagem2,
-      tipoMetro: "mt²",
-      descricao:
-        "Forro de gesso de alta qualidade para transformar seus tetos com elegância e sofisticação.",
-      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
-    },
-
-    {
-      nome: "Sancas de Gesso",
-      preco: 29.99,
-      imagem: imagem3,
-      tipoMetro: "Metro linear",
-      descricao:
-        "Sancas de gesso elegantes para adicionar um toque de estilo aos seus ambientes.",
-      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
-    },
-    {
-      nome: "Divisórias de Gesso",
-      preco: 99.99,
-      imagem: imagem4,
-      tipoMetro: "mt²",
-      descricao:
-        "Divisórias de gesso versáteis para criar espaços funcionais em seu interior.",
-      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
-    },
-    {
-      nome: "Molduras de Gesso Personalizadas",
-      preco: 19.99,
-
-      imagem: imagem5,
-      tipoMetro: "Metro linear",
-      descricao:
-        "Molduras de gesso decorativas para realçar a beleza de suas paredes e tetos.",
-      galery: [imagem, imagem2, imagem4, imagem3, imagem5],
-    },
-  ];
 
   const showImageGallery = (gallery: StaticImageData[]) => {
     setCurrentGallery(gallery);
@@ -199,22 +140,31 @@ export default function Home() {
               <p className="text-xs">Gesso de Excelência, Teto de Elegância.</p>
             </div>
           </div>
-          <div className="text-white flex items-center space-x-4">
-            <a href="#" className="hover:text-gray-300">
-              <FaFacebook size={24} />
-            </a>
-            <a href="#" className="hover:text-gray-300">
-              <FaInstagram size={24} />
-            </a>
-            <a href="#" className="hover:text-gray-300">
-              <FaTwitter size={24} />
-            </a>
+          <div className="flex items-center flex-col justify-center gap-2">
+            <div className="text-white flex items-center space-x-4">
+              <a href="#" className="hover:text-gray-300">
+                <FaFacebook size={24} />
+              </a>
+              <a href="#" className="hover:text-gray-300">
+                <FaInstagram size={24} />
+              </a>
+              <a href="#" className="hover:text-gray-300">
+                <FaTwitter size={24} />
+              </a>
+            </div>
+            <button
+              onClick={() => {}}
+              className="bg-green-700 w-full text-sm text-white gap-1 flex rounded-md px-2 py-2 items-center justify-center "
+            >
+              WhatsApp
+              <FaWhatsapp size={25} />
+            </button>
           </div>
         </div>
       </header>
 
       <section className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-        {produtosWRGESSO.map((produto, index) => (
+        {ProdutosWRGESSO.map((produto, index) => (
           <div
             key={index}
             className="bg-white p-4 rounded-lg shadow-md border-2 border-blue-200 flex flex-col"
@@ -240,7 +190,7 @@ export default function Home() {
                 className="bg-blue-900 text-white px-2 py-1 rounded-md"
                 onClick={() => showImageGallery(produto.galery)}
               >
-                Imagens
+                Exemplos
               </a>
             </div>
             <button
