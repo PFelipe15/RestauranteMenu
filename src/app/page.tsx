@@ -134,10 +134,10 @@ export default function Home() {
       <header className="bg-blue-500 p-4 shadow-md">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Image alt="logo" src={Logo} width={50} height={50} />
+            <Image alt="logo" src={Logo} width={60} height={60} />
             <div className="text-white">
-              <h1 className="text-xl font-semibold">WR GESSO</h1>
-              <p className="text-xs">Gesso de Excelência, Teto de Elegância.</p>
+              <h1 className="text-2xl font-semibold">WR GESSO</h1>
+              <p className="text-sm">Gesso de Excelência, Teto de Elegância.</p>
             </div>
           </div>
           <div className="flex items-center flex-col justify-center gap-2">
@@ -154,7 +154,7 @@ export default function Home() {
             </div>
             <button
               onClick={() => {
-                const link = `https://api.whatsapp.com/send?phone=5586988034600&text=Olá, estou querendo solicitar um Orcamento!`;
+                const link = `https://api.whatsapp.com/send?phone=558688058994&text=Olá, estou querendo solicitar um Orcamento!`;
 
                 const newTab = window.open(link, "_blank");
                 if (newTab) {
@@ -167,6 +167,23 @@ export default function Home() {
             >
               WhatsApp
               <FaWhatsapp size={25} />
+            </button>
+
+            <button
+              onClick={() => {
+                const link = `https://maps.app.goo.gl/x1X8wZQwiSbkDkHJ9`;
+
+                const newTab = window.open(link, "_blank");
+                if (newTab) {
+                  newTab.focus();
+                } else {
+                  window.location.href = link;
+                }
+              }}
+              className="bg-white text-sm text-blue-500 gap-1 flex rounded-md px-2  py-2 items-center justify-center "
+            >
+              Localização
+              <FaMapMarkerAlt size={25} />
             </button>
           </div>
         </div>
