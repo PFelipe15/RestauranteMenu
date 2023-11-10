@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "WR-GESSO",
-  description: "Servico especializado em forro e Gesso",
+  title: "Restaurante Flutuante",
+  description: "Servico especializado em Pratos Tipicos",
 };
 
 export default function RootLayout({

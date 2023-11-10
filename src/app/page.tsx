@@ -1,143 +1,46 @@
 "use client";
 import Image, { StaticImageData } from "next/image";
-import Logo from "../assets/logo.png";
+import Logo from "./assets/logo.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
 import { FaFacebook, FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import OrcamentoDialog from "./components/OrcamentoModal";
-import axios from "axios";
-import ProdutosWRGESSO from "./data/services";
+import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { pratosData } from "./data/services";
+import { Transition } from "react-transition-group";
+import { FaShoppingCart } from "react-icons/fa";
+
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
 export default function Home() {
-  const [productName, setProductName] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState("");
-  const [cancelGps, setCancelGps] = useState(false);
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [currentGallery, setCurrentGallery] = useState<
-    StaticImageData[] | null
-  >(null);
-  const [ampliarImageIndex, setAmpliarImageIndex] = useState<number | null>(
-    null
-  );
-
-  useEffect(() => {
-    if (cancelGps === false) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
-          const url = `http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1&accept-language=pt-BR&zoom=18`;
-
-          axios
-            .get(url)
-            .then(function (response) {
-              if (response.status === 200) {
-                return response.data;
-              } else {
-                throw new Error("Erro na requisição.");
-              }
-            })
-            .then(function (data) {
-              setUserLocation(data.display_name);
-            })
-            .catch(function (error) {
-              console.error(error);
-            });
-        });
-      } else {
-        alert("A geolocalização não é suportada neste navegador.");
-        setCancelGps(true);
-      }
-    }
-  }, [cancelGps]);
-
-  const showImageGallery = (gallery: StaticImageData[]) => {
-    setCurrentGallery(gallery);
-    setIsGalleryOpen(true);
+  const [itsDown, setItsDown] = useState(false);
+  const [showIgredients, setShowIgredients] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [pratos, setPratos] = useState([]);
+  const handleAddToCart = (product: []): void => {
+    setCart([...cart, product]);
   };
 
-  const ImageGallery = () => {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <button
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            onClick={() => setIsGalleryOpen(false)}
-          >
-            Fechar
-          </button>
-          <div className="image-container grid grid-cols-3 gap-4">
-            {ampliarImageIndex !== null && <AmpliarModal />}
-            {currentGallery &&
-              currentGallery.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative group"
-                  onClick={() => setAmpliarImageIndex(index)}
-                >
-                  <Image
-                    src={image}
-                    alt={`Imagem ${index + 1}`}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="opacity-0 group-hover:opacity-100 absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
-                    <button className="text-white hover:text-gray-300">
-                      Ampliar
-                    </button>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-    );
+  const handleRemoveFromCart = (product) => {
+    const updatedCart = cart.filter((item) => item.nome !== product.nome);
+    setCart(updatedCart);
   };
+  const handleToggleIngredientes = (index) => {
+    setShowIgredients(!showIgredients);
 
-  const AmpliarModal = () => {
-    if (ampliarImageIndex === null) {
-      return null;
-    }
-
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <button
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            onClick={() => setAmpliarImageIndex(null)}
-          >
-            Fechar
-          </button>
-
-          {currentGallery &&
-            ampliarImageIndex !== null &&
-            currentGallery[ampliarImageIndex] !== null && (
-              <Image
-                src={currentGallery[ampliarImageIndex]}
-                alt={`Imagem ${ampliarImageIndex + 1}`}
-                className="w-full h-96 object-contain"
-              />
-            )}
-        </div>
-      </div>
-    );
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-  };
-  const handlePedirOrcamento = async (nomeProduto: string) => {
-    setProductName(nomeProduto);
-    setIsDialogOpen(true);
+    setItsDown(!showIgredients);
   };
 
   return (
-    <main className="flex min-h-screen flex-col">
-      <header className="bg-blue-500 p-4 shadow-md">
+    <main className="flex min-h-screen flex-col items-center">
+      <header className="bg-primaryColor p-4 shadow-md w-full">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Image alt="logo" src={Logo} width={60} height={60} />
             <div className="text-white">
-              <h1 className="text-2xl font-semibold">WR GESSO</h1>
-              <p className="text-sm">Gesso de Excelência, Teto de Elegância.</p>
+              <h1 className="text-xl font-semibold">Restaurante Flutuante</h1>
+              <p className="text-xs">Servico especializado em Pratos Tipicos</p>
             </div>
           </div>
           <div className="flex items-center flex-col justify-center gap-2">
@@ -154,7 +57,7 @@ export default function Home() {
             </div>
             <button
               onClick={() => {
-                const link = `https://api.whatsapp.com/send?phone=558698527763&text=Olá, estou querendo solicitar um Orcamento!`;
+                const link = `https://api.whatsapp.com/send?phone= &text=Olá, estou querendo solicitar um Orcamento!`;
 
                 const newTab = window.open(link, "_blank");
                 if (newTab) {
@@ -180,7 +83,7 @@ export default function Home() {
                   window.location.href = link;
                 }
               }}
-              className="bg-white text-sm text-blue-500 gap-1 flex rounded-md px-2  py-2 items-center justify-center "
+              className="bg-white text-sm text-red-primaryColor gap-1 flex rounded-md px-2  py-2 items-center justify-center "
             >
               Localização
               <FaMapMarkerAlt size={25} />
@@ -189,64 +92,123 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-        {ProdutosWRGESSO.map((produto, index) => (
-          <div
-            key={index}
-            className="bg-white p-4 rounded-lg shadow-md border-2 border-blue-200 flex flex-col"
-          >
-            <div className="flex items-center justify-center">
-              <Image
-                alt="produto imagem"
-                src={produto.imagem}
-                width={700}
-                height={300}
-              />
-            </div>
-            <h2 className="text-lg font-semibold mt-2">
-              {produto.nome} (por {produto.tipoMetro})
-            </h2>
-            <p className="text-gray-600 text-sm">{produto.descricao}</p>
-            <div className="flex justify-between items-center mt-4">
-              <p className="text-xl font-semibold text-blue-500">
-                R$ {produto.preco.toFixed(2)} / {produto.tipoMetro}
-              </p>
-              <a
-                href="#"
-                className="bg-blue-900 text-white px-2 py-1 rounded-md"
-                onClick={() => showImageGallery(produto.galery)}
-              >
-                Exemplos
-              </a>
-            </div>
-            <button
-              onClick={() => {
-                handlePedirOrcamento(produto.nome);
-              }}
-              className="bg-blue-500 w-full text-white px-8 py-2 rounded-md mt-4"
-            >
-              Pedir Orçamento
-            </button>
-            {isGalleryOpen && <ImageGallery />}
+      <section className="flex flex-col container  p-4  ">
+        <h1 className="text-2xl font-semibold mb-4 py-2 mr-4 border-b-2  border-primaryColor  ">
+          Pratos
+        </h1>
 
-            {isDialogOpen && (
-              <OrcamentoDialog
-                productName={productName.toString()}
-                handleCloseModal={handleCloseDialog}
-                userLocation={userLocation.toString()}
-              />
-            )}
-          </div>
-        ))}
+        <div className="flex  flex-wrap gap-5 ">
+          {pratosData.map((produto, index) => (
+            <div
+              key={index}
+              className="bg-white p-4  rounded-lg shadow-md border-2 border-amber-950 flex flex-col"
+            >
+              <div className="flex items-center justify-center">
+                <Image
+                  alt="produto imagem"
+                  src={Logo}
+                  width={420}
+                  height={200}
+                />
+              </div>
+              <h2 className="text-lg font-semibold mt-2">{produto.nome}</h2>
+              <div className="mt-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-semibold">Ingredientes:</h3>
+                  <button
+                    onClick={() => {
+                      handleToggleIngredientes(index);
+                    }}
+                    className="text-primaryColor hover:underline focus:outline-none"
+                  >
+                    {showIgredients ? <FaCaretUp /> : <FaCaretDown />}
+                  </button>
+                </div>
+                {showIgredients && (
+                  <ul className="list-disc pl-5 mt-2">
+                    {produto.ingredientes.map((ingrediente, i) => (
+                      <li
+                        key={i}
+                        className=" transition duration-300 text-sm ease-in-out hover:bg-gray-100 hover:text-gray-700"
+                      >
+                        {ingrediente}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <p className="text-xl font-semibold text-primaryColor">
+                  R$ {produto.preco.toFixed(2)}
+                </p>
+                <a
+                  href="#"
+                  className="bg-primaryColor text-white px-2 py-1 rounded-md"
+                >
+                  Exemplos
+                </a>
+              </div>
+              <button
+                onClick={() => {
+                  handleAddToCart(produto);
+                }}
+                className="bg-primaryColor w-full text-white px-8 py-2 rounded-md mt-4"
+              >
+                Pedir
+              </button>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <div className="bg-white p-4 border-t border-gray-200 flex justify-between items-center flex-col">
-        <div className="flex items-center p-2">
-          <FaMapMarkerAlt className="text-blue-500 mr-3 " size={24} />
-          <p className="text-blue-500">
-            Rua Adão Belarmino, 1992 - Parque Piauí II, Timon - MA, 65636-540,
-            Brasil
-          </p>
+      <button
+        onClick={() => setIsCartOpen(!isCartOpen)}
+        className="bg-primaryColor text-white right-6 top-40 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 fixed"
+      >
+        <FaShoppingCart size={24} />
+      </button>
+
+      <div
+        className={`fixed right-0 top-0 h-screen w-64 bg-white p-4 border-2 border-amber-950 rounded-l-lg shadow-md transition-all duration-300 ${
+          isCartOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <h2 className="text-lg font-semibold">Carrinho de Compras</h2>
+        {cart.length === 0 ? (
+          <p className="text-lg text-primaryColor">Seu carrinho está vazio.</p>
+        ) : (
+          <ul className="space-y-4">
+            {cart.map((product, index) => (
+              <li
+                key={index}
+                className="flex items-between justify-between border-b-2 "
+              >
+                <span>
+                  {product.nome} - R$ {product.preco.toFixed(2)}
+                </span>
+                <button
+                  onClick={() => handleRemoveFromCart(product)}
+                  className="text-red-500 hover:text-red-700 cursor-pointer"
+                >
+                  Remover
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-4 flex flex-col gap-5 justify-between">
+          <button
+            onClick={() => setIsCartOpen(false)}
+            className="bg-red-500 text-white px-4 py-2 rounded-md"
+          >
+            Fechar
+          </button>
+          <button
+            onClick={() => {}}
+            className="bg-green-500 text-white px-4 py-2 rounded-md"
+          >
+            Finalizar Compra
+          </button>
         </div>
       </div>
     </main>

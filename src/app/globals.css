@@ -14,13 +14,11 @@
   :root {
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 205, 245, 253;
+    --background-end-rgb: 25, 2, 0;
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb)))
+  background: #fff
 }
