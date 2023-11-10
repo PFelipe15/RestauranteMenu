@@ -15,21 +15,45 @@ const prisma = new PrismaClient();
 export default function Home() {
   const [itsDown, setItsDown] = useState(false);
   const [showIgredients, setShowIgredients] = useState(false);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<any[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [pratos, setPratos] = useState([]);
-  const handleAddToCart = (product: []): void => {
+  const handleAddToCart = (product: {}): void => {
     setCart([...cart, product]);
   };
-
-  const handleRemoveFromCart = (product) => {
+  const handleRemoveFromCart = (product: any) => {
     const updatedCart = cart.filter((item) => item.nome !== product.nome);
     setCart(updatedCart);
   };
-  const handleToggleIngredientes = (index) => {
+  const handleToggleIngredientes = () => {
     setShowIgredients(!showIgredients);
 
     setItsDown(!showIgredients);
+  };
+  const sendMessage = () => {
+    // Construir a mensagem personalizada com os pedidos e o total
+    let mensagem = `Olá! Gostaria de fazer o seguinte pedido no Restaurante Flutuante:\n\n`;
+
+    cart.forEach((produto, index) => {
+      mensagem += `${index + 1}. ${produto.nome} - R$ ${produto.preco.toFixed(
+        2
+      )}\n`;
+    });
+
+    const total = cart.reduce((acc, produto) => acc + produto.preco, 0);
+    mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
+
+    // Construir o link do WhatsApp com a mensagem
+    const link = `https://api.whatsapp.com/send?phone=5586988034600&text=${encodeURIComponent(
+      mensagem
+    )}`;
+
+    // Abrir o link em uma nova aba ou na mesma janela
+    const newTab = window.open(link, "_blank");
+    if (newTab) {
+      newTab.focus();
+    } else {
+      window.location.href = link;
+    }
   };
 
   return (
@@ -117,7 +141,7 @@ export default function Home() {
                   <h3 className="text-base font-semibold">Ingredientes:</h3>
                   <button
                     onClick={() => {
-                      handleToggleIngredientes(index);
+                      handleToggleIngredientes();
                     }}
                     className="text-primaryColor hover:underline focus:outline-none"
                   >
@@ -141,12 +165,7 @@ export default function Home() {
                 <p className="text-xl font-semibold text-primaryColor">
                   R$ {produto.preco.toFixed(2)}
                 </p>
-                <a
-                  href="#"
-                  className="bg-primaryColor text-white px-2 py-1 rounded-md"
-                >
-                  Exemplos
-                </a>
+               
               </div>
               <button
                 onClick={() => {
@@ -204,7 +223,9 @@ export default function Home() {
             Fechar
           </button>
           <button
-            onClick={() => {}}
+            onClick={() => {
+              sendMessage();
+            }}
             className="bg-green-500 text-white px-4 py-2 rounded-md"
           >
             Finalizar Compra
