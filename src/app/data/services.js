@@ -1,4 +1,4 @@
-const prisma = new PrismaClient();
+
 const pratosData = [
     {
         nome: "Molho de Pescada com Camarão",
