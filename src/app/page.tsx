@@ -6,7 +6,6 @@ import { FaFacebook, FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { pratosData } from "./data/services";
-import { Transition } from "react-transition-group";
 import { FaShoppingCart } from "react-icons/fa";
 
 export default function Home() {
