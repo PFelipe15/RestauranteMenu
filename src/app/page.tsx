@@ -38,7 +38,6 @@ export default function Home() {
     const total = cart.reduce((acc, produto) => acc + produto.preco, 0);
     mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
 
-    // Construir o link do WhatsApp com a mensagem
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=${encodeURIComponent(
       mensagem
     )}`;
