@@ -64,7 +64,7 @@ export default function Home() {
 
     mensagem += `\n\n${emojis.smiley} Obrigado por escolher o Restaurante Flutuante! ${emojis.smiley}`;
     mensagem += `\n${emojis.thumbsUp} Aguarde nossa confirmação. Estamos preparando tudo com carinho! ${emojis.thumbsUp}`;
-    mensagem += `\n${emojis.clock} O prazo estimado de entrega é de 30 a 45 minutos. Agradecemos pela sua paciência!`;
+    mensagem += `\n${emojis.clock} O prazo estimado de entrega é de 30 a 40 minutos. Agradecemos pela sua paciência!`;
 
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=${encodeURIComponent(
       mensagem
