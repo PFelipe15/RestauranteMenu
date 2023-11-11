@@ -286,7 +286,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex gap-4  ">
+          <div className="flex gap-4 flex-col">
             <button
               onClick={() => setIsCartOpen(false)}
               className="bg-red-500 text-white px-4 py-2 rounded-md"
