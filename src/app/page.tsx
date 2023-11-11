@@ -9,9 +9,6 @@ import { pratosData } from "./data/services";
 import { Transition } from "react-transition-group";
 import { FaShoppingCart } from "react-icons/fa";
 
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
-
 export default function Home() {
   const [itsDown, setItsDown] = useState(false);
   const [showIgredients, setShowIgredients] = useState(false);
@@ -165,7 +162,6 @@ export default function Home() {
                 <p className="text-xl font-semibold text-primaryColor">
                   R$ {produto.preco.toFixed(2)}
                 </p>
-               
               </div>
               <button
                 onClick={() => {
