@@ -21,7 +21,74 @@ export default function Home() {
   const [showIgredients, setShowIgredients] = useState(false);
   const [cart, setCart] = useState<any[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<
+    "automatic" | "manual" | "preferNotToSay"
+  >("automatic");
   const [paymentMethod, setPaymentMethod] = useState<string>("pix");
+  const [location, setLocation] = useState<string>("");
+  const [manualAddress, setManualAddress] = useState({
+    bairro: "",
+    rua: "",
+    casa: "",
+    complemento: "",
+  });
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const handleManualAddressChange = (field: any, value: any) => {
+    setManualAddress((prevAddress) => ({
+      ...prevAddress,
+      [field]: value,
+    }));
+  };
+
+  const handleManualAddressConfirm = () => {
+    // Verifica se algum dos campos está em branco
+    if (
+      manualAddress.bairro.trim() === "" ||
+      manualAddress.rua.trim() === "" ||
+      manualAddress.casa.trim() === ""
+    ) {
+      // Exibe o Toastify com a mensagem de erro
+      Toastify({
+        text: "Por favor, preencha todos os campos do endereço.",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        style: {
+          background: "red",
+        },
+      }).showToast();
+      return; // Não continua a execução se algum campo estiver em branco
+    }
+
+    // Formata o endereço manual e define a localização
+    const formattedManualAddress = Object.values(manualAddress)
+      .filter((value) => value.trim() !== "")
+      .join(", ");
+
+    setLocation(formattedManualAddress);
+
+    // Exibe o Toastify de confirmação
+    Toastify({
+      text: `Endereço confirmado. Clique em Confirmar para finalizar.`,
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "center",
+      stopOnFocus: true,
+      style: {
+        background: "green",
+      },
+    }).showToast();
+  };
   const handleAddToCart = (product: { nome: string }): void => {
     setCart([...cart, product]);
     Toastify({
@@ -48,8 +115,10 @@ export default function Home() {
   };
 
   const sendMessage = () => {
+    openModal();
+  };
+  const confirmSendMessage = () => {
     let mensagem = `Olá! 😊 Gostaria de fazer o seguinte pedido no Restaurante Flutuante:\n\n`;
-
     cart.forEach((produto, index) => {
       mensagem += `${index + 1}. ${
         produto.nome
@@ -62,32 +131,93 @@ export default function Home() {
       phone: "📱",
       money: "💵",
       clock: "🕒",
+      location: "📍",
+      casa: "🏠",
+      rua: "🛣️",
+      bairro: "🏡",
+      complemento: "🔍",
     };
+
     const total = cart.reduce((acc, produto) => acc + produto.preco, 0);
     mensagem += `\nTotal: 💵 R$ ${total.toFixed(2)}`;
 
-    // Adding payment method information to the message
+    // Adicionando informações de método de pagamento à mensagem
     mensagem += `\n\nMétodo de Pagamento: ${
       paymentMethod === "pix"
         ? ` PIX ${emojis.phone} `
         : ` Espécie ${emojis.money}  `
     }`;
 
-    // Emojis for a more pleasant message
-
+    // Emojis para uma mensagem mais agradável
     mensagem += `\n\n${emojis.smiley} Obrigado por escolher o Restaurante Flutuante! ${emojis.smiley}`;
     mensagem += `\n${emojis.thumbsUp} Aguarde nossa confirmação. Estamos preparando tudo com carinho! ${emojis.thumbsUp}`;
     mensagem += `\n${emojis.clock} O prazo estimado de entrega é de 30 a 40 minutos. Agradecemos pela sua paciência!`;
+
+    // Adicionando a localização com base no selectedOption
+    switch (selectedOption) {
+      case "automatic":
+        getLocationAutomatically();
+        mensagem += `\n\n${emojis.location} Localização Automática: Estou enviando minha localização atual.\n\n ${location}`;
+        break;
+      case "manual":
+        if (manualAddress.bairro && manualAddress.rua && manualAddress.casa) {
+          mensagem += `\n\n${emojis.location} Localização Manual:\n`;
+          mensagem += `${emojis.casa} Casa: ${manualAddress.casa}\n`;
+          mensagem += `${emojis.rua} Rua: ${manualAddress.rua}\n`;
+          mensagem += `${emojis.bairro} Bairro: ${manualAddress.bairro}\n`;
+          if (manualAddress.complemento) {
+            mensagem += `${emojis.complemento} Complemento: ${manualAddress.complemento}\n`;
+          }
+        } else {
+          // Exibe o Toastify com a mensagem de erro
+          Toastify({
+            text: "Por favor, preencha todos os campos do endereço.",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "center",
+            style: {
+              background: "red",
+            },
+          }).showToast();
+          return;
+        }
+        break;
+      case "preferNotToSay":
+        mensagem += `\n\n${emojis.location} Preferi não informar a localização: Enviarei a minha localização pelo WhatsApp.`;
+        break;
+      default:
+        break;
+    }
 
     const link = `https://api.whatsapp.com/send?phone=5586988034600&text=${encodeURIComponent(
       mensagem
     )}`;
 
     const newTab = window.open(link, "_blank");
+
     if (newTab) {
       newTab.focus();
     } else {
       window.location.href = link;
+    }
+  };
+  const getLocationAutomatically = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const link = `https://maps.google.com/maps?q=${latitude},${longitude}`;
+          setLocation(link);
+        },
+        (error) => {
+          console.error("Erro ao obter a localização:", error);
+          // Aqui você pode fornecer um feedback ao usuário sobre o erro
+        }
+      );
+    } else {
+      console.error("Geolocalização não é suportada pelo navegador.");
+      // Aqui você pode fornecer um feedback ao usuário sobre a falta de suporte à geolocalização
     }
   };
 
@@ -155,39 +285,6 @@ export default function Home() {
               className="bg-white text-sm text-red-primaryColor gap-1 flex rounded-md px-2 py-2 items-center justify-center "
             >
               Localização
-              <FaMapMarkerAlt size={25} />
-            </button>
-            <button
-              onClick={() => {
-                // Abrir uma janela ou diálogo para permitir que o usuário compartilhe a localização
-                if ("geolocation" in navigator) {
-                  navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                      const { latitude, longitude } = position.coords;
-                      const link = `https://maps.google.com/maps?q=${latitude},${longitude}`;
-
-                      const newTab = window.open(link, "_blank");
-                      if (newTab) {
-                        newTab.focus();
-                      } else {
-                        window.location.href = link;
-                      }
-                    },
-                    (error) => {
-                      console.error("Erro ao obter a localização:", error);
-                      // Aqui você pode fornecer um feedback ao usuário sobre o erro
-                    }
-                  );
-                } else {
-                  console.error(
-                    "Geolocalização não é suportada pelo navegador."
-                  );
-                  // Aqui você pode fornecer um feedback ao usuário sobre a falta de suporte à geolocalização
-                }
-              }}
-              className="bg-white text-sm text-red-primaryColor gap-1 flex rounded-md px-2 py-2 items-center justify-center "
-            >
-              Compartilhar Localização
               <FaMapMarkerAlt size={25} />
             </button>
           </div>
@@ -350,6 +447,141 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-4">Escolha uma opção:</h3>
+            <div className="flex flex-col gap-4">
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="automatic"
+                  checked={selectedOption === "automatic"}
+                  onChange={() => setSelectedOption("automatic")}
+                  className="mr-2"
+                />
+                Localização Atual
+              </label>
+              {selectedOption === "automatic" && (
+                <p className="text-sm text-gray-600 mb-4">
+                  A localização atual automatica, será mandado o pedido para sua
+                  localização atual.
+                </p>
+              )}
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="manual"
+                  checked={selectedOption === "manual"}
+                  onChange={() => setSelectedOption("manual")}
+                  className="mr-2"
+                />
+                Colocar Endereço Manualmente
+              </label>
+              {selectedOption === "manual" && (
+                <div className=" ">
+                  <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Bairro
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Bairro"
+                      className="mt-1 p-2 border rounded-md w-full"
+                      value={manualAddress.bairro}
+                      onChange={(e) =>
+                        handleManualAddressChange("bairro", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Rua
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Rua"
+                      className="mt-1 p-2 border rounded-md w-full"
+                      value={manualAddress.rua}
+                      onChange={(e) =>
+                        handleManualAddressChange("rua", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Casa
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Casa"
+                      className="mt-1 p-2 border rounded-md w-full"
+                      value={manualAddress.casa}
+                      onChange={(e) =>
+                        handleManualAddressChange("casa", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Complemento
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Complemento"
+                      className="mt-1 p-2 border rounded-md w-full"
+                      value={manualAddress.complemento}
+                      onChange={(e) =>
+                        handleManualAddressChange("complemento", e.target.value)
+                      }
+                    />
+                  </div>
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded-md"
+                    onClick={handleManualAddressConfirm}
+                  >
+                    Confirmar Endereço
+                  </button>
+                </div>
+              )}
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="preferNotToSay"
+                  checked={selectedOption === "preferNotToSay"}
+                  onChange={() => setSelectedOption("preferNotToSay")}
+                  className="mr-2"
+                />
+                Enviar por WhatsApp
+              </label>
+
+              {selectedOption === "preferNotToSay" && (
+                <p className="text-sm text-gray-600 mb-4">
+                  Vou enviar minha localização por WhatsApp!
+                </p>
+              )}
+            </div>
+            <div className="mt-6 flex justify-end">
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded-md mr-2"
+                onClick={() => {
+                  confirmSendMessage();
+                  closeModal();
+                }}
+              >
+                Confirmar
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+                onClick={closeModal}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
