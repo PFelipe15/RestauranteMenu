@@ -23,8 +23,8 @@ export default function Home() {
   const [cart, setCart] = useState<any[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>("pix");
-  const handleAddToCart = (product: {}): void => {
-    setCart([...cart, product]);
+  const handleAddToCart = (product: { nome: string }): void => {
+    setCart([...cart, product]);  
 
     Toastify({
       text: `${product.nome} Adicionado ao Carrinho`,
