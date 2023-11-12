@@ -11,6 +11,9 @@ import {
   FaCaretUp,
   FaShoppingCart,
 } from "react-icons/fa";
+import Toastify from "toastify-js";
+
+import "toastify-js/src/toastify.css";
 import { useState, useEffect } from "react";
 import { pratosData } from "./data/services";
 
@@ -22,6 +25,18 @@ export default function Home() {
   const [paymentMethod, setPaymentMethod] = useState<string>("pix");
   const handleAddToCart = (product: {}): void => {
     setCart([...cart, product]);
+
+    Toastify({
+      text: `${product.nome} Adicionado ao Carrinho`,
+      duration: 3000,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "linear-gradient(to right, #362219, green)",
+      },
+    }).showToast();
   };
 
   const handleRemoveFromCart = (product: any) => {
@@ -43,17 +58,6 @@ export default function Home() {
       } - 💵 R$ ${produto.preco.toFixed(2)}\n`;
     });
 
-    const total = cart.reduce((acc, produto) => acc + produto.preco, 0);
-    mensagem += `\nTotal: 💵 R$ ${total.toFixed(2)}`;
-
-    // Adding payment method information to the message
-    mensagem += `\n\nMétodo de Pagamento: ${
-      paymentMethod === "pix"
-        ? "PIX (Transferência Bancária)"
-        : "Espécie (Dinheiro)"
-    }`;
-
-    // Emojis for a more pleasant message
     const emojis = {
       smiley: "😊",
       thumbsUp: "👍",
@@ -61,6 +65,17 @@ export default function Home() {
       money: "💵",
       clock: "🕒",
     };
+    const total = cart.reduce((acc, produto) => acc + produto.preco, 0);
+    mensagem += `\nTotal: 💵 R$ ${total.toFixed(2)}`;
+
+    // Adding payment method information to the message
+    mensagem += `\n\nMétodo de Pagamento: ${
+      paymentMethod === "pix"
+        ? ` PIX ${emojis.phone} `
+        : ` Espécie ${emojis.money}  `
+    }`;
+
+    // Emojis for a more pleasant message
 
     mensagem += `\n\n${emojis.smiley} Obrigado por escolher o Restaurante Flutuante! ${emojis.smiley}`;
     mensagem += `\n${emojis.thumbsUp} Aguarde nossa confirmação. Estamos preparando tudo com carinho! ${emojis.thumbsUp}`;
@@ -219,7 +234,7 @@ export default function Home() {
       </button>
 
       <div
-        className={`fixed right-0 top-0 h-screen w-72 bg-white p-4 border-2 border-amber-950 rounded-l-lg shadow-md transition-all duration-300 ${
+        className={`fixed right-0 top-0 w-72 bg-white p-4 border-2 border-amber-950 rounded-l-lg shadow-md transition-all duration-300 max-h-screen overflow-y-auto ${
           isCartOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -286,7 +301,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex gap-4  ">
+          <div className="flex gap-4 flex-col ">
             <button
               onClick={() => setIsCartOpen(false)}
               className="bg-red-500 text-white px-4 py-2 rounded-md"
