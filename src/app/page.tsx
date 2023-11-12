@@ -12,7 +12,6 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import Toastify from "toastify-js";
-
 import "toastify-js/src/toastify.css";
 import { useState, useEffect } from "react";
 import { pratosData } from "./data/services";
@@ -24,15 +23,14 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>("pix");
   const handleAddToCart = (product: { nome: string }): void => {
-    setCart([...cart, product]);  
-
+    setCart([...cart, product]);
     Toastify({
       text: `${product.nome} Adicionado ao Carrinho`,
       duration: 3000,
       close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "center", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
+      gravity: "top",
+      position: "center",
+      stopOnFocus: true,
       style: {
         background: "linear-gradient(to right, #362219, green)",
       },
@@ -157,6 +155,39 @@ export default function Home() {
               className="bg-white text-sm text-red-primaryColor gap-1 flex rounded-md px-2 py-2 items-center justify-center "
             >
               Localização
+              <FaMapMarkerAlt size={25} />
+            </button>
+            <button
+              onClick={() => {
+                // Abrir uma janela ou diálogo para permitir que o usuário compartilhe a localização
+                if ("geolocation" in navigator) {
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      const { latitude, longitude } = position.coords;
+                      const link = `https://maps.google.com/maps?q=${latitude},${longitude}`;
+
+                      const newTab = window.open(link, "_blank");
+                      if (newTab) {
+                        newTab.focus();
+                      } else {
+                        window.location.href = link;
+                      }
+                    },
+                    (error) => {
+                      console.error("Erro ao obter a localização:", error);
+                      // Aqui você pode fornecer um feedback ao usuário sobre o erro
+                    }
+                  );
+                } else {
+                  console.error(
+                    "Geolocalização não é suportada pelo navegador."
+                  );
+                  // Aqui você pode fornecer um feedback ao usuário sobre a falta de suporte à geolocalização
+                }
+              }}
+              className="bg-white text-sm text-red-primaryColor gap-1 flex rounded-md px-2 py-2 items-center justify-center "
+            >
+              Compartilhar Localização
               <FaMapMarkerAlt size={25} />
             </button>
           </div>
