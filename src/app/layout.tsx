@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import { Inter as FontSans } from "next/font/google"
+import { cn } from "@/lib/utils"
+ 
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,7 +22,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body  
+      className={cn(
+          "min-h-screen bg-secondary font-sans antialiased",
+          fontSans.variable
+        )}>{children}</body>
     </html>
   );
 }

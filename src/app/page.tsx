@@ -1,7 +1,8 @@
 "use client";
 import Image, { StaticImageData } from "next/image";
-import Logo from "./assets/logo.png";
 import { FaMapMarkerAlt, FaMobileAlt, FaMoneyBillAlt } from "react-icons/fa";
+import Logo from "./assets/logo.png";
+
 import {
   FaFacebook,
   FaInstagram,
@@ -15,6 +16,7 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import { useState, useEffect } from "react";
 import { pratosData } from "./data/services";
+import Header from "./components/Header/Header";
 
 export default function Home() {
   const [itsDown, setItsDown] = useState(false);
@@ -33,6 +35,23 @@ export default function Home() {
     casa: "",
     complemento: "",
   });
+
+
+const chamaToastify = (msg:string, color:string)=>{
+  Toastify({
+    text: msg,
+    duration: 3000,
+    close: true,
+    gravity: "top",
+    position: "center",
+    style: {
+      background: color,
+    },
+  }).showToast();
+}
+
+
+
   const openModal = () => {
     setShowModal(true);
   };
@@ -49,59 +68,28 @@ export default function Home() {
   };
 
   const handleManualAddressConfirm = () => {
-    // Verifica se algum dos campos está em branco
-    if (
+     if (
       manualAddress.bairro.trim() === "" ||
       manualAddress.rua.trim() === "" ||
       manualAddress.casa.trim() === ""
     ) {
-      // Exibe o Toastify com a mensagem de erro
-      Toastify({
-        text: "Por favor, preencha todos os campos do endereço.",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "center",
-        style: {
-          background: "red",
-        },
-      }).showToast();
+       chamaToastify("Por favor, preencha todos os campos do endereço.", "red")
       return; // Não continua a execução se algum campo estiver em branco
     }
 
-    // Formata o endereço manual e define a localização
-    const formattedManualAddress = Object.values(manualAddress)
+     const formattedManualAddress = Object.values(manualAddress)
       .filter((value) => value.trim() !== "")
       .join(", ");
 
     setLocation(formattedManualAddress);
 
-    // Exibe o Toastify de confirmação
-    Toastify({
-      text: `Endereço confirmado. Clique em Confirmar para finalizar.`,
-      duration: 3000,
-      close: true,
-      gravity: "top",
-      position: "center",
-      stopOnFocus: true,
-      style: {
-        background: "green",
-      },
-    }).showToast();
+    chamaToastify(`Endereço confirmado. Clique em Confirmar para finalizar.`,"green")
+ 
   };
   const handleAddToCart = (product: { nome: string }): void => {
     setCart([...cart, product]);
-    Toastify({
-      text: `${product.nome} Adicionado ao Carrinho`,
-      duration: 3000,
-      close: true,
-      gravity: "top",
-      position: "center",
-      stopOnFocus: true,
-      style: {
-        background: "linear-gradient(to right, #362219, green)",
-      },
-    }).showToast();
+    chamaToastify(`${product.nome} Adicionado ao Carrinho`,"linear-gradient(to right, #362219, green)")
+ 
   };
 
   const handleRemoveFromCart = (product: any) => {
@@ -211,19 +199,19 @@ export default function Home() {
           setLocation(link);
         },
         (error) => {
+          chamaToastify("Erro ao obter a localização:", "red");
           console.error("Erro ao obter a localização:", error);
-          // Aqui você pode fornecer um feedback ao usuário sobre o erro
-        }
+         }
       );
     } else {
-      console.error("Geolocalização não é suportada pelo navegador.");
-      // Aqui você pode fornecer um feedback ao usuário sobre a falta de suporte à geolocalização
-    }
+      chamaToastify("Geolocalização não é suportada pelo navegador.", "yellow");
+     }
   };
 
+  
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <header className="bg-primaryColor p-4 shadow-md w-full">
+      {/* <header className="bg-primaryColor p-4 shadow-md w-full">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Image
@@ -289,8 +277,8 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </header>
-
+      </header> */}
+<Header/>
       <section className="flex flex-col container p-4">
         <h1 className="text-3xl font-semibold mb-4 py-2 mr-4 border-b-2  border-primaryColor">
           Deliciosos Pratos Típicos

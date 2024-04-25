@@ -41,9 +41,4 @@ const pratosData = [
 ];
 
 
-
-
-
-
-
 export { pratosData };
