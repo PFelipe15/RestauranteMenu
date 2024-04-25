@@ -26,16 +26,16 @@ const Header: React.FC = () => {
               height={60}
             />
             <div className="text-white">
-              <h1 className="text-xl 2xl:text-4xl font-semibold">
+              <h1 className="text-xl 2xl:text-4xl font-bold">
                 Restaurante Flutuante
               </h1>
-              <p className="text-xs 2xl:text-xl">
+              <p className="text-xs 2xl:text-lg">
                 Servico especializado em Pratos Tipicos
               </p>
             </div>
           </div>
           <div className="flex gap-2  text-white font-bold items-center mt-4 ">
-            <div className=" p-2 bg-white bg-opacity-10  rounded-md font-bold flex items-center space-x-4 ">
+            <div className=" p-2 bg-white bg-opacity-10 px-4 rounded-md font-bold flex items-center space-x-4 ">
               <a href="#" className="">
                 Home
               </a>
