@@ -1,44 +1,60 @@
-
-const pratosData = [
+const roupasData = [
     {
-        nome: "Molho de Pescada com Camarão",
+        nome: "Vestido Floral Elegante",
         preco: 221.90,
-        ingredientes: ["Verduras", "Dendê", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Vestido elegante com estampa floral",
+        materiais: ["Algodão", "Poliéster"],
+        image: "./assets/Roupas/IMG-20210222-WA0332.jpg",
+        categoria: "Vestidos"
     },
     {
-        nome: "Filé de Pescada ao Camarão com Molho",
+        nome: "Blazer Slim Fit",
         preco: 207.90,
-        ingredientes: ["Verduras", "Dendê", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Blazer slim fit para ocasiões formais",
+        materiais: ["Lã", "Poliéster", "Algodão"],
+        image: "./assets/Roupas/IMG-20210222-WA0333.jpg",
+        categoria: "Blazers"
     },
     {
-        nome: "Filé de Piratinga na Chapa com Molho de Camarão",
+        nome: "Calça Jeans Skinny",
         preco: 199.90,
-        ingredientes: ["Verduras", "Dendê", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Calça jeans de corte justo e moderno",
+        materiais: ["Denim", "Elastano"],
+        image: "./assets/Roupas/IMG-20210222-WA0334.jpg",
+        categoria: "Calças"
     },
-
     {
-        nome: "Arroz Colorido e Farofa",
+        nome: "Camisa Casual Estampada",
         preco: 112.90,
-        ingredientes: ["Verduras", "Dendê", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Camisa casual com estampa moderna",
+        materiais: ["Algodão"],
+        image: "./assets/Roupas/IMG-20210222-WA0335.jpg",
+        categoria: "Camisas"
     },
     {
-        nome: "Tilápia Frita",
+        nome: "Sapatos de Couro Clássicos",
         preco: 111.90,
-        ingredientes: ["Camarão", "Caranguejo", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Sapatos de couro clássicos para qualquer ocasião",
+        materiais: ["Couro", "Borracha"],
+        image: "./assets/Roupas/IMG-20210222-WA0336.jpg",
+        categoria: "Sapatos"
     },
-
     {
-        nome: "Arroz Colorido e Farofa",
+        nome: "Vestido Floral Elegante",
         preco: 112.90,
-        ingredientes: ["Verduras", "Dendê", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Vestido elegante com estampa floral",
+        materiais: ["Algodão", "Poléster"],
+        image: "./assets/Roupas/IMG-20210222-WA0337.jpg",
+        categoria: "Vestidos"
     },
     {
-        nome: "Tilápia Frita",
+        nome: "Blazer Slim Fit",
         preco: 111.90,
-        ingredientes: ["Camarão", "Caranguejo", "Ovos", "Legumes", "Leite de Coco"]
+        descricao: "Blazer slim fit para ocasiões formais",
+        materiais: ["Lã", "Poliéster", "Algodão"],
+        image: "./assets/Roupas/IMG-20210222-WA0338.jpg",
+        categoria: "Blazers"
     },
-
 ];
 
-
-export { pratosData };
+export default roupasData;

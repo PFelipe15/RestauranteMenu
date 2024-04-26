@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../../assets/logo.png";
-
+ 
 import {
   FaFacebook,
   FaInstagram,
@@ -14,7 +14,7 @@ import Image from "next/image";
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-primary p-8 shadow-md w-full">
+    <header className="bg-gradient-to-r from-primary to-blue-900 p-8 shadow-md w-full">
       <div className="container mx-auto flex items-center gap-4 justify-between">
         <div>
           <div className="flex items-center space-x-3">
@@ -27,7 +27,7 @@ const Header: React.FC = () => {
             />
             <div className="text-white">
               <h1 className="text-xl 2xl:text-4xl font-bold">
-                Restaurante Flutuante
+              Fashion Avenue
               </h1>
               <p className="text-xs 2xl:text-lg">
                 Servico especializado em Pratos Tipicos
