@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 
-export default function OptionModal({ closeModal }) {
-  const [itsDown, setItsDown] = useState(false);
-  const [showIgredients, setShowIgredients] = useState(false);
+export default function OptionModal({ closeModal }: () => void) {
   const [cart, setCart] = useState<any[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState<
     "automatic" | "manual" | "preferNotToSay"
   >("automatic");
